@@ -1,0 +1,56 @@
+CREATE TABLE Authors				#creating a table for Authors
+(
+  last_name             VARCHAR(50), 
+  First_name            VARCHAR(50) ,               
+  email   		        VARCHAR(50)               
+);
+
+INSERT INTO Authors (last_name, First_name, email) values 					#Inserting data into the table of Authors
+( 'Vurukonda', 'sai kumar', 'Saikumarvurukonda@gmail.com'),
+( 'Virus', 'Corona', 'COVID19@gmail.com');
+
+CREATE TABLE Reviewers				#creating a table for Reviewers
+(
+  last_name             VARCHAR(50),
+  First_name            VARCHAR(50),               
+  email           		VARCHAR(50),             
+  phone           		INT NOT NULL,                       
+  interests     		VARCHAR(150)                        
+);
+
+INSERT INTO Reviewers (last_name, First_name, email, phone, interests) values  #Inserting data into the table of Reviewers
+( 'Reviewer' , '1', 'Reviewer1@gmail.com', '123', 'Political');
+
+CREATE TABLE Papers					#creating a table for Papers
+(
+  Paper_id             	INT(50),					 
+  abstract            	VARCHAR(50) ,
+  title           		VARCHAR(50) ,                
+  File_name           	VARCHAR(50)               
+);
+
+INSERT INTO Papers (paper_id, abstract, title, File_name) values				#Inserting data into the table of Papers
+( '125' , 'abstract1', 'DBMS_Project', 'File1');
+
+
+CREATE TABLE Reviews				#creating a table for Reviews
+(
+  rate             		INT NOT NULL ,
+  readability           INT NOT NULL,
+  originality          	INT NOT NULL,
+  relevance           	INT NOT NULL,
+  techincal_merit     	INT          
+);
+
+INSERT INTO Reviews (rate, readability, originality, relevance, techincal_merit) values	#Inserting data into the table of Reviews
+( '5' , '4', '3','3', '5');
+
+Commands
+
+Queries:
+
+SELECT * FROM tables_name;
+SELECT last_name FROM Authors WHERE First_name = 'Sai kumar';
+DELETE FROM Authors WHERE First_name='corona';
+ALTER TABLE Authors ADD gender CHAR(1) AFTER last_name;
+ALTER TABLE Authors DROP gender;
