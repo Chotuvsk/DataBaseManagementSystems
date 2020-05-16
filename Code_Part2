@@ -1,0 +1,220 @@
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Scanner;
+public class PaperReviewDriver {
+	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+	static final String DB_URL = "jdbc:mysql://localhost/AuthorsDB";
+	static final String USER = "saiasuser";
+	static final String PASS = "950571";
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		System.out.println("1.Get paper details by author id");
+		System.out.println("2.Get paper reviews by paper id");
+		System.out.println("3.Get Number of papers submitted");
+		System.out.println("4.Create new Paper submission");
+		System.out.println("5.Delete Author by Author Id");
+		System.out.println("Please select your option: ");
+		PaperReviewDriver paperReviewObject=new PaperReviewDriver();
+		Scanner scanner = new Scanner(System.in);
+		int option=scanner.nextInt();
+		switch(option) {
+		case 1:{
+			System.out.println("Enter Author id: ");
+			int author_id=scanner.nextInt();
+			paperReviewObject.getPaperDetailsByPaperId(author_id);
+			break;
+		}
+		case 2:{
+			System.out.println("Enter Paper id: ");
+			int paper_id=scanner.nextInt();
+			paperReviewObject.getAllReviewsByPaperId(paper_id);
+			break;
+		}
+		case 3:{
+			paperReviewObject.getCountOfPapersSubmitted();
+			break;
+		}
+		case 4:{
+			System.out.println("Enter First Name of Author:");
+			String first_name=scanner.next();
+			System.out.println("Enter Last Name of Author:");
+			String last_name=scanner.next();
+			System.out.println("Enter Email Address:");
+			String email=scanner.next();
+			System.out.println("Enter Abstract of Paper:");
+			String abstracts=scanner.next();
+			System.out.println("Enter Title of Paper:");
+			String title=scanner.next();
+			System.out.println("Enter File Name");
+			String file_name=scanner.next();
+			paperReviewObject.createPaperSubmission(first_name,last_name,email,abstracts,title,file_name);
+			break;
+		}
+		case 5:{
+			System.out.println("Enter Author id:");
+			int author_id=scanner.nextInt();
+			paperReviewObject.deleteAuthorByAuthorId(author_id);
+			break;
+			
+		}
+		default:{
+			System.out.println("Not a valid option");
+			break;
+		}
+		}
+		scanner.close();
+	}
+	public void getPaperDetailsByPaperId(int author_id) {
+		Connection conn = null;
+		   Statement stmt = null;
+		   try {
+			  System.out.println("Connecting to database...");
+			  conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			  System.out.println("Creating statement...");
+		      stmt = conn.createStatement();
+		      String sql;
+		      sql = "SELECT Papers.paper_id,Papers.title,Papers.abstract,Authors.email,Authors.First_name,Authors.last_name FROM Authors INNER JOIN Papers on Authors.author_id=Papers.author_id where Authors.author_id="+author_id+";";
+		      ResultSet rs = stmt.executeQuery(sql);
+		      while(rs.next()) {
+		    	  int paper_id=rs.getInt("paper_id");
+		    	  String title=rs.getString("title");
+		    	  String abstracts=rs.getString("abstract");
+		    	  String email=rs.getString("email");
+		    	  String first_name=rs.getString("First_name");
+		    	  String last_name=rs.getString("last_name");
+		    	  System.out.println("paper id: "+paper_id+"\t"+"title: "+title+"\t"+"abstract: "+abstracts+"\t"+"email address: "+email+"\t"+"first_name: "+first_name+"\t"+"last_name: "+last_name);
+		      }
+		      rs.close();
+		      stmt.close();
+		      conn.close();
+		   }
+		   catch(SQLException se) {
+			   System.out.print("Error Occured");
+		   }
+		
+	}
+	public void getAllReviewsByPaperId(int paper_id) {
+		Connection conn = null;
+		   Statement stmt = null;
+		   try {
+			  System.out.println("Connecting to database...");
+			  conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			  System.out.println("Creating statement...");
+		      stmt = conn.createStatement();
+		      String sql;
+		      sql = "SELECT rate,readability,originality,relevance,techincal_merit FROM Reviews where paper_id="+paper_id+";";
+		      ResultSet rs = stmt.executeQuery(sql);
+		      while(rs.next()) {
+		    	  int rate=rs.getInt("rate");
+		    	  int readability=rs.getInt("readability");
+		    	  int originality=rs.getInt("originality");
+		    	  int relevance=rs.getInt("relevance");
+		    	  int technical_merit=rs.getInt("techincal_merit");
+		    	  System.out.println("rate: "+rate+"\t"+"readability: "+readability+"\t"+"originality: "+originality+"\t"+"relevance: "+relevance+"\t"+"technical merit: "+technical_merit);
+		      }
+		      rs.close();
+		      stmt.close();
+		      conn.close();
+		   }
+		   catch(SQLException se) {
+			   System.out.print("Error Occured");
+		   }
+		
+	}
+	
+	public void getCountOfPapersSubmitted() {
+		Connection conn = null;
+		   Statement stmt = null;
+		   try {
+			  System.out.println("Connecting to database...");
+			  conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			  System.out.println("Creating statement...");
+		      stmt = conn.createStatement();
+		      String sql;
+		      sql = "select Count(*) from Papers;";
+		      ResultSet rs = stmt.executeQuery(sql);
+		      while(rs.next()) {
+		    	  int count=rs.getInt("Count(*)");
+		    	  System.out.println("No of papers submitted: "+count);
+		      }
+		      rs.close();
+		      stmt.close();
+		      conn.close();
+		   }
+		   catch(SQLException se) {
+			   System.out.print("Error Occured");
+		   }
+		
+	}
+	public void createPaperSubmission(String first_name,String last_name,String email,String abstracts,String title,String file_name) {
+		Connection conn = null;
+		   Statement stmt = null;
+		   try {
+			  System.out.println("Connecting to database...");
+			  conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			  System.out.println("Creating statement...");
+		      stmt = conn.createStatement();
+		      String sql;
+		      sql = "INSERT INTO Authors (last_name, First_name, email) values( '"+last_name+"', '"+first_name+"', '"+email+"')";
+		      stmt.execute(sql);
+		      sql="SELECT * FROM Authors where First_name='"+first_name+"' AND last_name='"+last_name+"' AND email='"+email+"';";
+		      ResultSet rs= stmt.executeQuery(sql);
+		      int author_id=1;
+		      while(rs.next()) {
+		    	  author_id=rs.getInt("author_id");
+		      }
+		      sql="INSERT INTO Papers (abstract, title, File_name,author_id) values( '"+abstracts+"', '"+title+"', '"+file_name+"',"+author_id+");";
+		      stmt.execute(sql);
+		      System.out.println("Inserted into tables successfully");
+		      stmt.close();
+		      conn.close();
+		   }
+		   catch(SQLException se) {
+			   System.out.print("Error Occured");
+		   }
+		
+	}
+	public void deleteAuthorByAuthorId(int author_id) {
+		Connection conn = null;
+		   Statement stmt = null;
+		   try {
+			   int authorIsDeleted=0;
+			  System.out.println("Connecting to database...");
+			  conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			  System.out.println("Creating statement...");
+		      stmt = conn.createStatement();
+		      String sql;
+
+		      sql = "SELECT author_id from authors where author_id='"+author_id+"';";
+		      ResultSet rs = stmt.executeQuery(sql);
+		      while(rs.next()) {
+		    	  
+	    	  if (author_id==rs.getInt("author_id"))
+		    	  {
+		    	  sql = "DELETE FROM authors WHERE author_id='"+author_id+"';";
+		    	  stmt.execute(sql);
+		    	  sql = "DELETE FROM papers WHERE author_id='"+author_id+"';";
+		    	  stmt.execute(sql);
+	    		  System.out.println("Deleted row successfully");
+		    	  authorIsDeleted=1;
+		    	  break;
+		    	  }
+		      }
+	    	  if (authorIsDeleted!=1)
+	    	  {
+	    		  System.out.println("AuthorId is not in the List");
+	    	  }
+		      stmt.close();
+		      conn.close();
+		   }
+		   catch(SQLException se) {
+			   System.out.print("Error Occured");
+			   System.out.println(se.getMessage());;
+		   }
+		
+	}
+	
+	
+
+}
