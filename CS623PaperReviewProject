@@ -1,0 +1,34 @@
+I have taken an existing ER Diagram for a “paper reviews” database and implemented it in a relational database
+
+There are few queries should return the following data (columns): Paper.Id, Paper.Title, Paper.Abstract, Author.EmailAddress,
+Author.FirstName, Author.LastName
+● Get all reviews for a paper by the paper’s Id, where the paper was recommended to be
+published. The query should return the following data (columns): All columns from the
+Review table.
+● Get a count of all papers submitted.
+● Create a new paper submission. Remember this includes creating new records in both
+the Author and Paper tables.
+● Try and Delete the first “Author” row in your Author table by the author’s id. Did you
+receive an error? If yes, print to the console the error you received. Also note in your
+message why the query failed. If it didn’t fail, print a message explaining why you were
+able to delete the row
+
+For above conditions i had created the tables for Authors, Reviewers, reviews, Paper,  
+
+Following options will be given to the user 
+1.Get paper details by author id
+2.Get paper reviews by paper id
+3.Get Number of papers submitted
+4.Create new Paper submission
+5.Delete Author by Author Id
+
+If option 1 is selected "Papers that are submitted will display, by giving the author_Id"
+If option 2 is selected "Reviews of Paper will display, by giving Paper_id"
+If option 3 is selected "Number of papers that are submitted will be return"
+If option 4 is selected "we can create a new paper using the Author's(First, last name), email address, Abstract of paper, title of paper, File name"
+If option 5 is selected "we can delete the Author using AuthorId"
+
+I had used "MYSQL" for database and the name of datbase is AuthorsDB.
+By giving the credentials of MYSQL database in the code, we can connect to the database.
+There are separate sections for each Options in the code which increases the readabilty and gives a clarity about the code modules.
+
